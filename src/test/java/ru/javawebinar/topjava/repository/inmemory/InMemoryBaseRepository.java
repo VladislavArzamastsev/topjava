@@ -7,11 +7,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+
 public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
-    private static final AtomicInteger counter = new AtomicInteger(0);
+    protected static final AtomicInteger counter = new AtomicInteger(START_SEQ);
 
-    private final Map<Integer, T> map = new ConcurrentHashMap<>();
+    protected final Map<Integer, T> map = new ConcurrentHashMap<>();
 
     public T save(T entity) {
         if (entity.isNew()) {
