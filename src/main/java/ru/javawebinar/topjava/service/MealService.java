@@ -8,13 +8,13 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.Util;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MealService {
@@ -41,7 +41,11 @@ public class MealService {
         if(u == null){
             return new ArrayList<>();
         }
-        return MealsUtil.getTos(repository.getAll(userId, startDateTime, endDateTime), u.getCaloriesPerDay());
+        LocalDateTime startOfDay = LocalDateTime.of(startDateTime.toLocalDate(), LocalTime.MIDNIGHT);
+        LocalDateTime startOfNextDayToEnd = LocalDateTime.of(endDateTime.toLocalDate(), LocalTime.MIDNIGHT).plusDays(1);
+        List<MealTo> tos = MealsUtil.getTos(repository.getAll(userId, startOfDay, startOfNextDayToEnd), u.getCaloriesPerDay());
+        return tos.stream().filter(to -> Util.isBetweenHalfOpen(to.getDateTime(), startDateTime, endDateTime)).collect(Collectors.toList());
+
     }
 
     public MealTo get(int id, Integer userId) {
