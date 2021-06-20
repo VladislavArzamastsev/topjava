@@ -4,6 +4,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
@@ -66,12 +67,21 @@ public class MealServlet extends HttpServlet {
                 break;
             case "create":
             case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(SecurityUtil.authUserId(),
-                                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                                "",
-                                1000) :
-                        mealController.get(getId(request));
+                Meal meal;
+                if ("create".equals(action)) {
+                    meal = new Meal(SecurityUtil.authUserId(),
+                            LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                            "",
+                            1000);
+                } else {
+                    MealTo mealTo = mealController.get(getId(request));
+                    meal = new Meal(
+                            mealTo.getId(),
+                            SecurityUtil.authUserId(),
+                            mealTo.getDateTime(),
+                            mealTo.getDescription(),
+                            mealTo.getCalories());
+                }
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -85,7 +95,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                request.setAttribute("meals", mealController.getAll());
+                request.setAttribute("meals", mealController.getBetween());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

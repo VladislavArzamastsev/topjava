@@ -22,11 +22,11 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Collection<MealTo> getAll() {
+    public Collection<MealTo> getBetween() {
         return service.getAll(SecurityUtil.authUserId());
     }
 
-    public Collection<MealTo> getAll(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime){
+    public Collection<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime){
         LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
         return service.getAll(SecurityUtil.authUserId(), startDateTime, endDateTime);

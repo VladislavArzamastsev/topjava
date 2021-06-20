@@ -63,4 +63,8 @@ public class InMemoryUserRepository implements UserRepository {
                 .orElseThrow(() ->
                         new NotFoundException(String.format("User with email { %s } not found", email)));
     }
+
+    public void init() {
+
+    }
 }

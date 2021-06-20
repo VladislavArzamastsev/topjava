@@ -1,12 +1,14 @@
-package ru.javawebinar.topjava.web.user;
+package ru.javawebinar.topjava.repository.inmemory;
 
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.util.Arrays;
 
